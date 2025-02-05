@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Szczegóły Projektu (Admin){% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Projekt: {{ project.name }}</h1>
+  <p>ID projektu: {{ project.id }}</p>
+  <p>Objętość: {{ project.volume_ml|round(2) }} ml</p>
+  <p>Wstępna wycena: {{ project.estimated_cost|round(2) }} PLN</p>
+  {% if project.final_cost %}
+    <p>Cena ostateczna: {{ project.final_cost|round(2) }} PLN</p>
+  {% endif %}
+  <p>Aktualny stan: {{ project.state }}</p>
+  <p>Zlecony przez: {{ project.owner.username if project.owner else 'Brak właściciela' }}</p>
+  <p>Ilość sztuk: {{ project.quantity }}</p>
+  <p>Komentarz do zamówienia: {{ project.order_comment if project.order_comment else 'Brak komentarza' }}</p>
+
+  
+  <!-- Formularze zmiany stanu -->
+  <form method="post" style="margin-bottom: 1rem;">
+    <button type="submit" name="prev_state" value="1">Przesuń do poprzedniego stanu</button>
+  </form>
+  <form method="post" style="margin-bottom: 1rem;">
+    <button type="submit" name="next_state" value="1">Przesuń do kolejnego stanu</button>
+  </form>
+  
+  <!-- Formularz aktualizacji ceny -->
+  <h3>Aktualizacja ceny</h3>
+  <form method="post">
+    <input type="text" name="final_cost" placeholder="Nowa cena">
+    <button type="submit">Zaktualizuj cenę</button>
+  </form>
+  
+  <h3>Pliki:</h3>
+  <ul>
+    {% for file in files %}
+      <li>
+        <a href="{{ url_for('download', project_id=project.id, file_id=file.id) }}">
+          {{ file.filename }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  
+  
+  <h3>Historia zmian stanu:</h3>
+  <ul>
+    {% for log in logs %}
+      <li>{{ log.timestamp }}: {{ log.old_state }} → {{ log.new_state }} (przez {{ log.changed_by }})</li>
+    {% endfor %}
+  </ul>
+  
+  <a href="{{ url_for('admin_dashboard') }}">Powrót do panelu</a>
+</div>
+{% endblock %}

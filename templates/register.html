@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Rejestracja{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Rejestracja</h1>
+  <form method="post">
+    <input type="text" name="username" placeholder="Nazwa użytkownika" required><br>
+    <input type="email" name="email" placeholder="Email" required><br>
+    <input type="password" name="password" placeholder="Hasło" required><br>
+    <label for="role">Wybierz rolę:</label>
+    <select name="role" id="role" required>
+      <option value="client">Zleceniodawca</option>
+      <option value="business">Zleceniobiorca</option>
+    </select><br>
+    <button type="submit">Zarejestruj się</button>
+  </form>
+  <p>Masz już konto? <a href="{{ url_for('login') }}">Zaloguj się</a></p>
+</div>
+{% endblock %}

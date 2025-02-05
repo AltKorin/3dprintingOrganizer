@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Aktualizacja Mojej Ceny za ml{% endblock %}
+{% block content %}
+<div class="card">
+    <h1>Aktualizacja Mojej Ceny za ml</h1>
+    <p>Obecna cena: {{ current_price if current_price is not none else "Nie ustawiono" }} PLN/ml</p>
+    <form method="post">
+         <label for="my_price_per_ml">Nowa cena (PLN/ml):</label>
+         <input type="text" name="my_price_per_ml" id="my_price_per_ml" placeholder="Podaj nową cenę za ml" required>
+         <button type="submit">Zaktualizuj</button>
+    </form>
+    <a href="{{ url_for('business_dashboard') }}">Powrót do panelu biznesowego</a>
+</div>
+{% endblock %}

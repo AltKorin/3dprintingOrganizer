@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Upload Projektu{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Upload Projektu</h1>
+  <form method="post" enctype="multipart/form-data">
+    <div>
+      <label for="project_name">Nazwa projektu:</label>
+      <input type="text" name="project_name" id="project_name" placeholder="Podaj nazwę projektu" required>
+    </div>
+    <div>
+      <label for="quantity">Ilość sztuk:</label>
+      <input type="number" name="quantity" id="quantity" placeholder="Podaj ilość sztuk" min="1" required>
+    </div>
+    <div>
+      <label for="order_comment">Komentarz do zamówienia:</label>
+      <textarea name="order_comment" id="order_comment" placeholder="Podaj dodatkowe informacje, np. kolory, materiał, skala"></textarea>
+    </div>
+    <div>
+      <label for="files">Wybierz pliki (.stl, .obj):</label>
+      <input type="file" name="files" id="files" multiple required>
+    </div>
+    <button type="submit">Wyślij</button>
+  </form>
+</div>
+{% endblock %}

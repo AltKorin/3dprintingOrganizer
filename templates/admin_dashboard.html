@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Panel Administratora{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Panel Administratora</h1>
+  <p>Zalogowany jako: {{ current_user.username }} ({{ current_user.role }})</p>
+  <a href="{{ url_for('logout') }}">Wyloguj</a>
+  <h2>Projekty</h2>
+  <ul>
+    {% for project in projects %}
+      <li>
+        <a href="{{ url_for('admin_project_detail', project_id=project.id) }}">{{ project.name }}</a>
+        – Stan: {{ project.state }}
+        – Zlecony przez: {{ project.owner.username if project.owner else 'Brak właściciela' }}
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

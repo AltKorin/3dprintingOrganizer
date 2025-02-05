@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Aktualizacja Globalnej Ceny za ml{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Aktualizacja Globalnej Ceny za ml</h1>
+  <p>Obecna globalna cena: {{ global_price }} PLN/ml</p>
+  <form method="post">
+    <div>
+      <label for="global_price">Nowa cena (PLN/ml):</label>
+      <input type="text" name="global_price" id="global_price" placeholder="Podaj nową globalną cenę" required>
+    </div>
+    <button type="submit">Zaktualizuj</button>
+  </form>
+  <a href="{{ url_for('admin_dashboard') }}">Powrót do panelu administratora</a>
+</div>
+{% endblock %}
