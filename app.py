@@ -19,19 +19,7 @@ passwordlenght = len(hashed_password)
 
 # Ustawienie connection string do Cloud SQL (upewnij się, że prefiks /cloudsql/ jest obecny)
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'Sudomie1952$'
 
-# Google OAuth configuration
-app.config['GOOGLE_CLIENT_ID'] = '666989927124-dr1um1fe20bm7rs46nodrgfks3968v7u.apps.googleusercontent.com'
-app.config['GOOGLE_CLIENT_SECRET'] = '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'
-app.config['GOOGLE_DISCOVERY_URL'] = "https://accounts.google.com/.well-known/openid-configuration"
-
-# PayU configuration
-app.config['PAYU_POS_ID'] = '4356703'
-app.config['PAYU_SECOND_KEY'] = '7028999a81ae48f13197481f99f6a52e'
-app.config['PAYU_CLIENT_ID'] = '4356703'
-app.config['PAYU_CLIENT_SECRET'] = '564b7ef99607426ce84258d7b48fb5c4'
-app.config['PAYU_API_URL'] = 'https://secure.snd.payu.com'
 
 # Initialize OAuth
 oauth = OAuth(app)
