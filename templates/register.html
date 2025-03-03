@@ -3,16 +3,23 @@
 {% block content %}
 <div class="card">
   <h1>Rejestracja</h1>
-  <form method="post">
-    <input type="text" name="username" placeholder="Nazwa użytkownika" required><br>
-    <input type="email" name="email" placeholder="Email" required><br>
-    <input type="password" name="password" placeholder="Hasło" required><br>
-    <label for="role">Wybierz rolę:</label>
-    <select name="role" id="role" required>
-      <option value="client">Zleceniodawca</option>
-      <option value="business">Zleceniobiorca</option>
-    </select><br>
-    <button type="submit">Zarejestruj się</button>
+  <form method="POST" action="{{ url_for('register') }}">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <label for="first_name">First Name:</label>
+    <input type="text" id="first_name" name="first_name" required>
+    <label for="last_name">Last Name:</label>
+    <input type="text" id="last_name" name="last_name" required>
+    <label for="role">Role:</label>
+    <select id="role" name="role" required>
+        <option value="client">Client</option>
+        <option value="business">Business</option>
+    </select>
+    <button type="submit">Register</button>
   </form>
   <p>Masz już konto? <a href="{{ url_for('login') }}">Zaloguj się</a></p>
 </div>

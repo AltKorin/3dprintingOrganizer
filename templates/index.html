@@ -1,8 +1,26 @@
 {% extends "base.html" %}
 {% block title %}Strona główna{% endblock %}
 {% block content %}
-<div class="card">
-  <h1>Witamy w 3D Drukarni</h1>
-  <p><a href="{{ url_for('login') }}">Zaloguj się</a> lub <a href="{{ url_for('register') }}">Zarejestruj</a></p>
+<div class="container">
+  <h1>Witamy w Systemie Zamówień w Stolem 3d</h1>
+  <h2>System umożliwiający zamawianie na podstawie przesłanych plików STL lub linków do STL</h2>
+  <p>W celu skorzystania z systemu należy się zalogować lub zarejestrować</p>
+  <div class="card">
+    <h3>Kontakt</h3>
+    <p>Jeżeli jesteś zainteresowany współpracą z nami, skontaktuj się z nami pod adresem: <a href="mailto:contact@sklepstolem.pl">contact@sklepstolem.pl</a></p>
+  </div>
+  <div class="card">
+    <h3>Oferta</h3>
+    <p>Jeżeli chcesz dowiedzieć się więcej o naszej ofercie, odwiedź naszą stronę internetową: <a href="https://www.sklepstolem.pl">www.sklepstolem.pl</a></p>
+    <p>lub wejdź na naszego facebooka <a href="https://www.facebook.com/Stolem">Stolem Centrum Gier</a></p>
+  </div>
+  <div class="card">
+    <h3>Akcje</h3>
+    <p><a href="{{ url_for('login') }}" class="button">Zaloguj się</a> 
+    lub <a href="{{ url_for('register') }}" class="button">Zarejestruj</a></p>
+    <p><a href="{{ url_for('upload') }}" class="button">Dodaj nowy projekt</a></p>
+    <p><a href="{{ url_for('client_dashboard') }}" class="button">Panel klienta</a></p>
+    <p><a href="{{ url_for('business_dashboard') }}" class="button">Panel drukarza</a></p>
+  </div>
 </div>
 {% endblock %}

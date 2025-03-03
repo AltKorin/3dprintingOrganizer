@@ -1,0 +1,22 @@
+# Ignoruj pliki i foldery związane z Git
+.git/
+.gitignore
+
+# Ignoruj foldery wirtualnych środowisk
+venv/
+env/
+new_venv/
+
+# Ignoruj pliki tymczasowe
+*.pyc
+__pycache__/
+
+# Lokalna baza danych
+instance/
+
+# Lokalne uploads
+uploads/
+
+# Ignoruj inne pliki, których nie potrzebujesz w deployu
+tests/
+docs/

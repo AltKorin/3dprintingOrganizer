@@ -3,16 +3,59 @@
 {% block content %}
 <div class="card">
   <h1>Projekt: {{ project.name }}</h1>
-  <p>ID projektu: {{ project.id }}</p>
-  <p>Objętość: {{ project.volume_ml|round(2) }} ml</p>
-  <p>Wstępna wycena: {{ project.estimated_cost|round(2) }} PLN</p>
-  {% if project.final_cost %}
-    <p>Cena ostateczna: {{ project.final_cost|round(2) }} PLN</p>
-  {% endif %}
-  <p>Aktualny stan: {{ project.state }}</p>
-  <p>Zlecony przez: {{ project.owner.username if project.owner else 'Brak właściciela' }}</p>
-  <p>Ilość sztuk: {{ project.quantity }}</p>
-  <p>Komentarz do zamówienia: {{ project.order_comment if project.order_comment else 'Brak komentarza' }}</p>
+  <table>
+    <tr>
+      <th hidden>ID projektu</th>
+      <td hidden>{{ project.id }}</td>
+    </tr>
+    <tr>
+      <th>Klient</th>
+      <td>{{ project.owner.username if project.owner else 'Brak właściciela' }}</td>
+    </tr>
+    <tr>
+      <th>Adres email Klienta</th>
+      <td>{{ project.owner.email }}</td>
+    </tr>
+    <tr>
+      <th>Objętość</th>
+      <td>{{ project.volume_ml|round(2) }} ml</td>
+    </tr>
+    <tr>
+      <th>Wstępna wycena</th>
+      <td>{{ project.estimated_cost|round(2) }} PLN</td>
+    </tr>
+    {% if current_user.role == 'business' %}
+    <tr>
+      <th>Moja Cena</th>
+      <td>
+        {% set my_price = current_user.my_price_per_ml if current_user.my_price_per_ml is not none else global_price %}
+        {{ (project.volume_ml * project.quantity * my_price)|round(2) }} PLN
+      </td>
+    </tr>
+    {% endif %}
+    {% if project.final_cost %}
+    <tr>
+      <th>Cena ostateczna</th>
+      <td>{{ project.final_cost|round(2) }} PLN</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <th>Aktualny stan</th>
+      <td>{{ project.state }}</td>
+    </tr>
+    <tr>
+      <th>Zlecony przez</th>
+      <td>{{ project.owner.username if project.owner else 'Brak właściciela' }}</td>
+    </tr>
+    <tr>
+      <th>Ilość sztuk</th>
+      <td>{{ project.quantity }}</td>
+    </tr>
+    <tr>
+      <th>Komentarz do zamówienia</th>
+      <td>{{ project.order_comment if project.order_comment else 'Brak komentarza' }}</td>
+    </tr>
+  </table>
 
   
   <!-- Formularze zmiany stanu -->
@@ -48,6 +91,14 @@
       <li>{{ log.timestamp }}: {{ log.old_state }} → {{ log.new_state }} (przez {{ log.changed_by }})</li>
     {% endfor %}
   </ul>
+
+  <form action="{{ url_for('admin_complete_project', project_id=project.id) }}" method="post">
+    <button type="submit">Oznacz jako zakończony przez administratora</button>
+</form>
+
+<form action="{{ url_for('admin_delete_project', project_id=project.id) }}" method="post">
+    <button type="submit">Usuń projekt</button>
+</form>
   
   <a href="{{ url_for('admin_dashboard') }}">Powrót do panelu</a>
 </div>

@@ -7,6 +7,7 @@
     <input type="text" name="username" placeholder="Nazwa użytkownika" required><br>
     <input type="password" name="password" placeholder="Hasło" required><br>
     <button type="submit">Zaloguj się</button>
+    <a href="{{ url_for('login_google') }}" class="button">Login z Google</a>
   </form>
 </div>
 {% endblock %}

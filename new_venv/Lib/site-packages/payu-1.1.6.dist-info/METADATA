@@ -1,0 +1,55 @@
+Metadata-Version: 2.1
+Name: payu
+Version: 1.1.6
+Summary: A climate model workflow manager for supercomputing environments
+Author-email: Marshall Ward <python@marshallward.org>
+Maintainer-email: ACCESS-NRI <access.nri@anu.edu.au>
+License: Apache-2.0
+Keywords: climate model,workflow
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Utilities
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+License-File: NOTICE
+License-File: AUTHORS
+Requires-Dist: f90nml>=0.16
+Requires-Dist: yamanifest>=0.3.4
+Requires-Dist: PyYAML
+Requires-Dist: requests
+Requires-Dist: python-dateutil
+Requires-Dist: tenacity>=8.0.0
+Requires-Dist: cftime
+Requires-Dist: GitPython>=3.1.40
+Requires-Dist: ruamel.yaml>=0.18.5
+Requires-Dist: packaging
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pylint; extra == "test"
+Requires-Dist: Sphinx; extra == "test"
+Provides-Extra: mitgcm
+Requires-Dist: mnctools>=0.2; extra == "mitgcm"
+
+Payu
+====
+
+.. image:: https://github.com/payu-org/payu/actions/workflows/CI.yml/badge.svg
+    :target: https://github.com/payu-org/payu/actions/workflows/CI.yml
+.. image:: https://github.com/payu-org/payu/actions/workflows/CD.yml/badge.svg
+    :target: https://github.com/payu-org/payu/actions/workflows/CD.yml
+.. image:: https://coveralls.io/repos/github/payu-org/payu/badge.svg?branch=master&killcache=1
+    :target: https://coveralls.io/github/payu-org/payu?branch=master
+.. image:: https://readthedocs.org/projects/docs/badge/?version=latest
+    :target: https://payu.readthedocs.io/en/latest/
+
+Payu is a climate model workflow management tool for supercomputing
+environments.
+
+Payu is currently only configured for use on computing clusters maintained by
+NCI (National Computational Infrastructure) in Australia.
+
+See the documentation_ for more details.
+
+.. _documentation: http://payu.readthedocs.org/en/latest/

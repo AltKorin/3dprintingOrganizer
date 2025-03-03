@@ -3,18 +3,58 @@
 {% block content %}
 <div class="card">
   <h1>Panel Biznesowy</h1>
-  <p>Zalogowany jako: {{ current_user.username }} ({{ current_user.role }})</p>
+  <p>Zalogowany jako: {{ current_user.username }}</p>
+  <p hidden>Twoja rola: {{ current_user.role }}</p>
   <a href="{{ url_for('logout') }}">Wyloguj</a>
+  
   <h2>Projekty</h2>
-  <ul>
-    {% for project in projects %}
-      <li>
-        <a href="{{ url_for('business_project_detail', project_id=project.id) }}">{{ project.name }}</a>
-        – Stan: {{ project.state }}
-        – Zlecony przez: {{ project.owner.username if project.owner else 'Brak właściciela' }}
-      </li>
-    {% endfor %}
-  </ul>
+  <table>
+    <thead>
+      <tr>
+        <th>Nazwa Projektu</th>
+        <th>Stan</th>
+        <th>Zlecony przez</th>
+        <th>Ilość sztuk</th>
+        <th>Adres email</th>
+        <th>Ilość ml</th>
+        <th>Moja Cena za ml</th>
+        <th>Ostateczna Cena</th>
+        <th>Akceptacja Klienta</th>
+        <th>Komentarz</th>
+        <th>Link do plików</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for project in projects %}
+      <tr>
+        <td><a href="{{ url_for('business_project_detail', project_id=project.id) }}">{{ project.name }}</a></td>
+        <td>{{ project.state }}</td>
+        <td>{{ project.owner.username if project.owner else 'Brak właściciela' }}</td>
+        <td>{{ project.quantity }}</td>
+        <td>{{ project.owner.email }}</td>
+        <td>{{ project.volume_ml|round(2) }}</td>
+        <td>
+          {% set my_price = current_user.my_price_per_ml if current_user.my_price_per_ml is not none else global_price %}
+          {{ (project.volume_ml * project.quantity * my_price)|round(2) }} PLN</td>
+        <td>{{ (project.final_cost if project.final_cost is not none else 0)|round(2) }} PLN</td>
+        <td>{{ 'Tak' if project.client_accepted_estimate else 'Nie' }}</td>
+        <td>{{ project.order_comment if project.order_comment else 'Brak komentarza' }}</td>
+        <td>
+          {% if project.files %}
+            <ul>
+              {% for file in project.files %}
+              <li><a href="{{ url_for('download', project_id=project.id, file_id=file.id) }}">{{ file.filename }}</a></li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p>Nie ma pliku. Skontaktuj się z klientem.</p>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
   <a href="{{ url_for('upload') }}">Dodaj nowy projekt</a>
   <br><br>
   <!-- Link umożliwiający aktualizację własnej ceny za ml -->

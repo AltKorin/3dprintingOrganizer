@@ -3,7 +3,8 @@
 {% block content %}
 <div class="card">
   <h1>Upload Projektu</h1>
-  <form method="post" enctype="multipart/form-data">
+  <form id="upload-form" method="post" enctype="multipart/form-data">
+    <!-- formularz pozostaje bez zmian -->
     <div>
       <label for="project_name">Nazwa projektu:</label>
       <input type="text" name="project_name" id="project_name" placeholder="Podaj nazwę projektu" required>
@@ -17,10 +18,135 @@
       <textarea name="order_comment" id="order_comment" placeholder="Podaj dodatkowe informacje, np. kolory, materiał, skala"></textarea>
     </div>
     <div>
+      <label for="upload_option">Opcja przesyłania:</label>
+      <select id="upload_option" name="upload_option" onchange="toggleUploadOption()">
+        <option value="file">Prześlij pliki</option>
+        <option value="link">Podaj link</option>
+      </select>
+    </div>
+    <div id="file-upload-section">
       <label for="files">Wybierz pliki (.stl, .obj):</label>
-      <input type="file" name="files" id="files" multiple required>
+      <input type="file" name="files" id="files" multiple>
+    </div>
+    <div id="link-upload-section" style="display: none;">
+      <label for="file_link">Link do pliku:</label>
+      <input type="url" name="file_link" id="file_link" placeholder="Podaj link do pliku">
     </div>
     <button type="submit">Wyślij</button>
+    <p>Jeżeli masz problem z wrzuceniem plików prosimy o wrzucenie na Dysk Google, WeTransfer albo podobną usługę i wrzucenie linku w komentarz. Proszę pamiętać o udostępnieniu dla osób posiadających link</p>
   </form>
+
+  <!-- Dodaj element progress bar -->
+  <progress id="upload-progress" max="100" value="0" style="display: none;"></progress>
 </div>
+
+<!-- Modal -->
+<div id="success-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Upload się udał.</p>
+  </div>
+</div>
+
+<script>
+  function toggleUploadOption() {
+    const uploadOption = document.getElementById('upload_option').value;
+    const fileUploadSection = document.getElementById('file-upload-section');
+    const linkUploadSection = document.getElementById('link-upload-section');
+    if (uploadOption === 'file') {
+      fileUploadSection.style.display = 'block';
+      linkUploadSection.style.display = 'none';
+    } else {
+      fileUploadSection.style.display = 'none';
+      linkUploadSection.style.display = 'block';
+    }
+  }
+
+  document.getElementById('upload-form').addEventListener('submit', function(event) {
+    const uploadOption = document.getElementById('upload_option').value;
+    if (uploadOption === 'file') {
+      const files = document.getElementById('files').files;
+      if (files.length > 0) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', this.action, true);
+        xhr.upload.onprogress = function(event) {
+          if (event.lengthComputable) {
+            const percentComplete = (event.loaded / event.total) * 100;
+            const progressBar = document.getElementById('upload-progress');
+            progressBar.value = percentComplete;
+            progressBar.style.display = 'block';
+          }
+        };
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            document.getElementById('success-modal').style.display = 'block';
+          } else {
+            alert('Upload failed.');
+          }
+        };
+        xhr.onerror = function() {
+          alert('Upload failed.');
+        };
+        xhr.send(formData);
+      }
+    }
+  });
+
+  // Modal handling
+  const modal = document.getElementById('success-modal');
+  const span = document.getElementsByClassName('close')[0];
+
+  span.onclick = function() {
+    modal.style.display = 'none';
+    window.location.href = '/';
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = 'none';
+      window.location.href = '/';
+    }
+  }
+</script>
+
+<style>
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+</style>
 {% endblock %}

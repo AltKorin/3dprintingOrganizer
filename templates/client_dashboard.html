@@ -1,19 +1,50 @@
 {% extends "base.html" %}
-{% block title %}Panel Klienta{% endblock %}
 {% block content %}
-<div class="card">
-  <h1>Panel Klienta</h1>
-  <p>Zalogowany jako: {{ current_user.username }} ({{ current_user.role }})</p>
-  <a href="{{ url_for('logout') }}">Wyloguj</a>
-  <h2>Twoje Projekty</h2>
-  <ul>
-    {% for project in projects %}
-      <li>
-        <a href="{{ url_for('client_project_detail', project_id=project.id) }}">{{ project.name }}</a>
-        – Stan: {{ project.state }}
-      </li>
-    {% endfor %}
-  </ul>
-  <a href="{{ url_for('upload') }}">Dodaj nowy projekt</a>
-</div>
+<h1>Panel Klienta</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Nazwa Projektu</th>
+            <th>Stan</th>
+            <th>Ilość</th>
+            <th>Wstępna wycena (PLN)</th>
+            <th>Ostateczna cena (PLN)</th>
+            <th>Opłacony</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in projects %}
+        {% if project.state != 'complete' %}
+        <tr>
+            <td><a href="{{ url_for('client_project_detail', project_id=project.id) }}">{{ project.name }}</a></td>
+            <td>{{ project.state }}</td>
+            <td>{{ project.quantity }}</td>
+            <td>{{ project.estimated_cost }}</td>
+            <td>{{ project.final_cost }}</td>
+            <td>{{ 'Tak' if project.paid else 'Nie' }}</td>
+            <td>
+                {% if not project.client_accepted_estimate %}
+                <form action="{{ url_for('client_accept_estimate', project_id=project.id) }}" method="post" style="display:inline;">
+                    <button type="submit">Akceptuj wycenę</button>
+                </form>
+                {% endif %}
+                <form action="{{ url_for('client_complete_project', project_id=project.id) }}" method="post" style="display:inline;">
+                    <button type="submit">Oznacz jako zakończony</button>
+                </form>
+                <form action="{{ url_for('delete_project', project_id=project.id) }}" method="post" style="display:inline;">
+                    <button type="submit">Usuń</button>
+                </form>
+                {% if project.client_accepted_estimate and not project.paid %}
+                <form action="{{ url_for('pay', project_id=project.id) }}" method="post" style="display:inline;">
+                    <button type="submit">Zapłać</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('upload') }}">Dodaj nowy projekt</a>
 {% endblock %}
